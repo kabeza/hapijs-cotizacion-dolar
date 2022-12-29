@@ -11,8 +11,7 @@ server.route({
   method: "GET",
   path: "/",
   handler: (request, h) => {
-
-    return "Hello, world!";
+    return "Welcome to server, all looks normal";
   }
 });
 
@@ -20,9 +19,7 @@ server.route({
   method: "GET",
   path: "/{name}",
   handler: (request, h) => {
-
     request.logger.info("In handler %s", request.path);
-
     return `Hello, ${encodeURIComponent(request.params.name)}!`;
   }
 });
@@ -46,7 +43,6 @@ const init = async () => {
     method: "GET",
     path: "/hello",
     handler: (request, h) => {
-
       return h.file("./public/hello.html");
     }
   });
@@ -56,7 +52,6 @@ const init = async () => {
 };
 
 process.on("unhandledRejection", (err) => {
-
   console.log(err);
   process.exit(1);
 });
