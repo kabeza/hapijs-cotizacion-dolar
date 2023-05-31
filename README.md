@@ -1,26 +1,34 @@
-# README
+# API para Cotizaciones del dolar
+Server en HapiJS que utiliza Cheerio para obtener cotizaciones del dolar, dolar blue, criptomonedas, etc. desde varios sitios
 
-This is the [hapi](https://hapijs.com) [Getting Started](https://hapijs.com/tutorials) tutorial on [Render](https://render.com).
+_Aplicación desarrollada con_
+- HapiJS
+- Cheerio
+- Axios
 
-The app in this repo is deployed at [https://hapijs.onrender.com](https://hapijs.onrender.com).
+## Endpoints
 
-## Deployment
-1. Create a new Render project using your version of this repo.
+Una vez deployada en la url definitiva (recordar que es un server Node/Express) , los endpoints son:
 
-2. Create a new web service in the project with the following values:
-    * Build Command: `npm install`
-    * Start Command: `node server.js`
+/dolarsanjuan  
+Obtiene datos de [https://dolarsanjuan.com/](https://dolarsanjuan.com/)
 
-That's it! Your web service will be live on your Render URL as soon as the build finishes.
+/dolarsi  
+Obtiene datos de [https://dolarsi.com/](https://dolarsi.com/)
 
-## Node versions
-By default, Render uses the latest LTS version of Node.
+/cronista
+Obtiene datos de [https://www.cronista.com/](https://www.cronista.com/)  
+O me banearon el ip o le pusieron Ajax y la info la trae despues del document ready, ahi ya es otra historia
 
-It can also automatically detects and install the version of Node specified in the [engines](https://docs.npmjs.com/files/package.json#engines) directive in `package.json`. This can be an exact version like `10.11.0` or a range like `>=10.11 <10.12`.
+/cronistacripto
+Obtiene datos de criptomonedas desde [https://www.cronista.com/](https://www.cronista.com/)  
+O me banearon el ip o le pusieron Ajax y la info la trae despues del document ready, ahi ya es otra historia
 
-This is the relevant snippet from `package.json` in this repo:
-```json
-  "engines": {
-    "node": ">=10 <11"
-  }
-```
+/bluelytics  
+Obtiene datos de [https://bluelytics.com.ar/](https://bluelytics.com.ar/)  
+
+<hr/>
+
+Actualmente se encuentra deployada en la siguiente url:  
+https://apidolarcripto.onrender.com/  
+** Tarda en cargar porque es un plan gratuito
