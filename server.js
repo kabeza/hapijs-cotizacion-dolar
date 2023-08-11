@@ -125,16 +125,6 @@ const server = Hapi.server({
       }
   });
 
-
-// server.route({
-//   method: "GET",
-//   path: "/{name}",
-//   handler: (request, h) => {
-//     request.logger.info("In handler %s", request.path);
-//     return `Hello, ${encodeURIComponent(request.params.name)}!`;
-//   }
-// });
-
 const init = async () => {
 
   await server.register([

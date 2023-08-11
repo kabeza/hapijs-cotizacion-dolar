@@ -22,9 +22,12 @@
   "dependencies": {
     "@hapi/hapi": "^21.0.0",
     "@hapi/inert": "^6.0.2",
-    "hapi-pino": "^8.2.0",
-    "cheerio": "^1.0.0-rc.10",
     "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
+    "hapi-pino": "^8.2.0",
     "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
