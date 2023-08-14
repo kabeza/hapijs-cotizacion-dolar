@@ -199,6 +199,91 @@ const cronista = async () => {
   }
 };
 
+const ambito = async () => {
+  const arreUrls = [];
+  arreUrls.push({
+    titulo: "Dólar Oficial",
+    url: "https://mercados.ambito.com//dolar/oficial/variacion"
+  });
+  arreUrls.push({
+    titulo: "Dólar Nación",
+    url: "https://mercados.ambito.com/dolarnacion/variacion"
+  });
+  arreUrls.push({
+    titulo: "Dólar Blue",
+    url: "https://mercados.ambito.com//euro/informal/variacion"
+  });
+  arreUrls.push({
+    titulo: "Dólar Turista",
+    url: "https://mercados.ambito.com//dolarturista/variacion"
+  });
+  arreUrls.push({
+    titulo: "Dólar Qatar",
+    url: "https://mercados.ambito.com//dolarqatar/variacion"
+  });
+  arreUrls.push({
+    titulo: "Dólar Crypto",
+    url: "https://mercados.ambito.com//dolarcripto/variacion"
+  });
+  arreUrls.push({
+    titulo: "Euro Oficial",
+    url: "https://mercados.ambito.com//euro/variacion"
+  });
+  arreUrls.push({
+    titulo: "Euro Blue",
+    url: "https://mercados.ambito.com//euro/informal/variacion"
+  });
+
+  // https://mercados.ambito.com//dolar/oficial/variacion
+  // https://mercados.ambito.com//euro/informal/variacion
+  // https://mercados.ambito.com//dolarqatar/variacion
+  // https://mercados.ambito.com//dolar/mayorista/variacion
+  // https://mercados.ambito.com//dolarahorro/variacion
+  // https://mercados.ambito.com//dolardelujo/variacion
+  // https://mercados.ambito.com//dolarturista/variacion
+  // https://mercados.ambito.com//dolarcripto/variacion
+  // https://mercados.ambito.com//euro//variacion
+  // https://mercados.ambito.com/dolar/informal/variacion
+  // https://mercados.ambito.com/dolarnacion/variacion
+
+  try {
+    
+    const retorno = [];
+    for (let item in arreUrls) {
+      //console.log(item);
+      //console.log(arreUrls[item]);
+      try {
+        var titulo = arreUrls[item].titulo;
+        var url2Get = arreUrls[item].url;
+        await axios.get(url2Get).then((resp) => {
+          retorno.push({
+            cotizacion: {
+              titulo: titulo,
+              empresas: [
+                {
+                  nombre: "ambito.com",
+                  variacion: resp.data.variacion,
+                  venta: resp.data.venta,
+                  compra: resp.data.compra,
+                  fecha: resp.data.fecha,
+                },
+              ],
+            },
+          });
+        });
+      } catch (error) {}
+    }
+    
+    return retorno;
+    
+  } catch (error) {
+    console.log("Error en ambito: ", error);
+    return false;
+  }
+
+}
+
+
 const cronistacripto = async () => {
     const url2Get = 'https://www.cronista.com/bitcoin/';
     try {
@@ -530,5 +615,6 @@ module.exports = {
     cronista,
     cronistacripto,
     bluelytics,
+    ambito,
     dolarsi
 };

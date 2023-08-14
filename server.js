@@ -17,6 +17,27 @@ const server = Hapi.server({
   });
 
   server.route({
+    method: "GET",
+    path: "/ambito",
+    handler: async (request, h) => {
+        const result = await scraper.ambito();
+        if (result) {
+            return {
+                status: true,
+                servicio: "ambito.com",
+                respuesta: result
+            };
+        }
+        else {
+            return {
+                status: false,
+                error: "Error con axios o algo" 
+            };
+        }        
+    }
+  });
+
+  server.route({
       method: "GET",
       path: "/dolarsanjuan",
       handler: async (request, h) => {
