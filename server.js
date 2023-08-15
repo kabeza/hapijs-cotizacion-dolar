@@ -38,6 +38,27 @@ const server = Hapi.server({
   });
 
   server.route({
+    method: "GET",
+    path: "/dolarito",
+    handler: async (request, h) => {
+        const result = await scraper.dolarito();
+        if (result) {
+            return {
+                status: true,
+                servicio: "dolarito.ar",
+                respuesta: result
+            };
+        }
+        else {
+            return {
+                status: false,
+                error: "Error con axios o algo" 
+            };
+        }        
+    }
+  });
+
+  server.route({
       method: "GET",
       path: "/dolarsanjuan",
       handler: async (request, h) => {

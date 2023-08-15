@@ -159,6 +159,70 @@ const dolarsanjuan = async () => {
   }
 };
 
+const dolarito = async () => {
+  const url2Get = "https://dolarito.ar";
+  try {
+    const response = await axios.get(url2Get);
+    const $ = cheerio.load(response.data);
+    const retorno = [];
+
+    $("li.chakra-wrap__listitem").each(function (i, e) {
+      if ($(this).find(".css-9jyaf5").text() == 'dolar oficial' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar blue' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar tarjeta' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar qatar' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar ahorro'
+      ) {
+        retorno.push(
+          {
+            cotizacion: {
+              titulo: "Dolarito.ar",
+              empresas: [
+                {
+                  nombre: $(this).find(".css-9jyaf5").text(),
+                  variacion: $(this).find(".css-1yqik73").text(),
+                  venta: $(this).find(".css-12u0t8b").text(),
+                  compra: $(this).find(".css-113t1jt").text().trim(),
+                  fecha: $(this).find(".css-1mivafk").text(),
+                },
+              ],
+            },
+          }        
+        );
+      }
+      
+      /*
+      resp[i] = {
+        cotizacion: {
+          titulo: $(this)
+            .find(".divisa-name")
+            .text()
+            .trim()
+            .replace(/(\r\n|\n|\r|\t)/gm, ""),
+          empresas: [
+            {
+              nombre: "dolarsanjuan.com",
+              variacion: "",
+              compra: $(this).find(".sub-in").first().find(".precioC").text(),
+              venta: $(this).find(".sub-in").last().find(".precioC").text(),
+              fecha: $(this)
+                .find(".actualiz")
+                .text()
+                .replace(/(\r\n|\n|\r|\t)/gm, ""),
+            },
+          ],
+        },
+      };
+      */
+      console.log("Dolarito");
+    });
+    return retorno;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 // let elem = $('*[data-indice="/dolarturista"]').html();
 const cronista = async () => {
   const url2Get = "https://www.cronista.com/MercadosOnline/dolar.html";
@@ -615,6 +679,7 @@ module.exports = {
     cronista,
     cronistacripto,
     bluelytics,
+    dolarito,
     ambito,
     dolarsi
 };
