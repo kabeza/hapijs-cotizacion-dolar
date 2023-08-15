@@ -176,10 +176,10 @@ const dolarito = async () => {
         retorno.push(
           {
             cotizacion: {
-              titulo: "Dolarito.ar",
+              titulo: $(this).find(".css-9jyaf5").text(),
               empresas: [
                 {
-                  nombre: $(this).find(".css-9jyaf5").text(),
+                  nombre: "dolarito.ar",
                   variacion: $(this).find(".css-1yqik73").text(),
                   venta: $(this).find(".css-12u0t8b").text(),
                   compra: $(this).find(".css-113t1jt").text().trim(),
