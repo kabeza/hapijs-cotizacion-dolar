@@ -59,6 +59,27 @@ const server = Hapi.server({
   });
 
   server.route({
+    method: "GET",
+    path: "/calculadoras",
+    handler: async (request, h) => {
+        const result = await scraper.calculadoras();
+        if (result) {
+            return {
+                status: true,
+                servicio: "calculadoras",
+                respuesta: result
+            };
+        }
+        else {
+            return {
+                status: false,
+                error: "Error con axios o algo" 
+            };
+        }        
+    }
+  });
+
+  server.route({
       method: "GET",
       path: "/dolarsanjuan",
       handler: async (request, h) => {

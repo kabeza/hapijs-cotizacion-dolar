@@ -223,6 +223,53 @@ const dolarito = async () => {
   }
 };
 
+const calculadoras = async () => {
+  const url2Get = "https://calculadoras.com.ar/pro";
+  try {
+    const response = await axios.get(url2Get);
+    const $ = cheerio.load(response.data);
+    const retorno = [];
+
+    console.log(response.data);
+    $("div.gap-2").each(function (i, e) {
+      console.log(`CalculadorasPro: ${i} || ${e}`);
+      retorno.push(i);
+    });
+
+    /*
+    $("li.chakra-wrap__listitem").each(function (i, e) {
+      if ($(this).find(".css-9jyaf5").text() == 'dolar oficial' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar blue' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar tarjeta' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar qatar' || 
+          $(this).find(".css-9jyaf5").text() == 'dolar ahorro'
+      ) {
+        retorno.push(
+          {
+            cotizacion: {
+              titulo: $(this).find(".css-9jyaf5").text(),
+              empresas: [
+                {
+                  nombre: "dolarito.ar",
+                  variacion: $(this).find(".css-1yqik73").text(),
+                  venta: $(this).find(".css-12u0t8b").text(),
+                  compra: $(this).find(".css-113t1jt").text().trim(),
+                  fecha: $(this).find(".css-1mivafk").text(),
+                },
+              ],
+            },
+          }        
+        );
+      }      
+    });
+    */
+    return retorno;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 // let elem = $('*[data-indice="/dolarturista"]').html();
 const cronista = async () => {
   const url2Get = "https://www.cronista.com/MercadosOnline/dolar.html";
@@ -681,5 +728,6 @@ module.exports = {
     bluelytics,
     dolarito,
     ambito,
-    dolarsi
+    dolarsi,
+    calculadoras,
 };
