@@ -1,81 +1,82 @@
-const cheerio = require("cheerio");
-const axios = require("axios").default;
-const moment = require("moment");
+/* eslint-disable eqeqeq */
+/* eslint-disable func-names */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-console */
+const cheerio = require('cheerio');
+const axios = require('axios').default;
+const moment = require('moment');
 
 const bluelytics = async () => {
-  const url2Get = "https://api.bluelytics.com.ar/v2/latest";
+  const url2Get = 'https://api.bluelytics.com.ar/v2/latest';
+  let datosFinal = [];
   try {
-    var datosFinal = [];
     await axios
       .get(url2Get)
       .then((resp) => {
         datosFinal = resp.data;
       })
-      .catch((err) => {
+      .catch(() => {
         datosFinal = [];
       });
-
-    var retorno = [];
-
-    var fecha = moment(datosFinal.last_update).format("DD/MM/YYYY, H:mm:ss");
+    const retorno = [];
+    const fecha = moment(datosFinal.last_update).format('DD/MM/YYYY, H:mm:ss');
 
     retorno.push({
       cotizacion: {
-        titulo: "Dolar Oficial",
+        titulo: 'Dolar Oficial',
         empresas: [
           {
-            nombre: "bluelytics.com.ar",
-            variacion: "",
+            nombre: 'bluelytics.com.ar',
+            variacion: '',
             venta: datosFinal.oficial.value_sell,
             compra: datosFinal.oficial.value_buy,
-            fecha: fecha,
+            fecha,
           },
         ],
       },
     });
     retorno.push({
       cotizacion: {
-        titulo: "Dolar Blue",
+        titulo: 'Dolar Blue',
         empresas: [
           {
-            nombre: "bluelytics.com.ar",
-            variacion: "",
+            nombre: 'bluelytics.com.ar',
+            variacion: '',
             venta: datosFinal.blue.value_sell,
             compra: datosFinal.blue.value_buy,
-            fecha: fecha,
+            fecha,
           },
         ],
       },
     });
     retorno.push({
       cotizacion: {
-        titulo: "Euro Oficial",
+        titulo: 'Euro Oficial',
         empresas: [
           {
-            nombre: "bluelytics.com.ar",
-            variacion: "",
+            nombre: 'bluelytics.com.ar',
+            variacion: '',
             venta: datosFinal.oficial_euro.value_sell,
             compra: datosFinal.oficial_euro.value_buy,
-            fecha: fecha,
+            fecha,
           },
         ],
       },
     });
     retorno.push({
       cotizacion: {
-        titulo: "Euro Blue",
+        titulo: 'Euro Blue',
         empresas: [
           {
-            nombre: "bluelytics.com.ar",
-            variacion: "",
+            nombre: 'bluelytics.com.ar',
+            variacion: '',
             venta: datosFinal.blue_euro.value_sell,
             compra: datosFinal.blue_euro.value_buy,
-            fecha: fecha,
+            fecha,
           },
         ],
       },
     });
-
     return retorno;
   } catch (error) {
     console.log(error);
@@ -84,69 +85,67 @@ const bluelytics = async () => {
 };
 
 const dolarsi = async () => {
-  const url2Get = "https://www.dolarsi.com/api/api.php?type=valoresprincipales";
+  const url2Get = 'https://www.dolarsi.com/api/api.php?type=valoresprincipales';
+  let datosFinal = [];
+  const retorno = [];
   try {
-    var datosFinal = [];
     await axios
       .get(url2Get)
       .then((resp) => {
         datosFinal = resp.data;
       })
-      .catch((err) => {
+      .catch(() => {
         datosFinal = [];
       });
-
-    var retorno = [];
-
     datosFinal.map((item) => {
       retorno.push({
         cotizacion: {
           titulo: item.casa.nombre,
           empresas: [
             {
-              nombre: "dolarsi.com",
+              nombre: 'dolarsi.com',
               variacion: item.casa.variacion,
               venta: item.casa.venta,
               compra: item.casa.compra,
-              fecha: "",
+              fecha: '',
             },
           ],
         },
       });
     });
-
     return retorno;
   } catch (error) {
-    console.log("Error", error);
+    console.log('Error', error);
     return false;
   }
 };
 
 const dolarsanjuan = async () => {
-  const url2Get = "https://dolarsanjuan.com";
+  const url2Get = 'https://dolarsanjuan.com';
   try {
     const response = await axios.get(url2Get);
     const $ = cheerio.load(response.data);
     const resp = [];
-
-    $(".sub").each(function (i, e) {
+    $('.sub').each(function (i, e) {
       resp[i] = {
         cotizacion: {
           titulo: $(this)
-            .find(".divisa-name")
+            .find('.divisa-name')
             .text()
             .trim()
-            .replace(/(\r\n|\n|\r|\t)/gm, ""),
+            .replace(/(\r\n|\n|\r|\t)/gm, ''),
           empresas: [
             {
-              nombre: "dolarsanjuan.com",
-              variacion: "",
-              compra: $(this).find(".sub-in").first().find(".precioC").text(),
-              venta: $(this).find(".sub-in").last().find(".precioC").text(),
+              nombre: 'dolarsanjuan.com',
+              variacion: '',
+              compra: $(this).find('.sub-in').first().find('.precioC')
+                .text(),
+              venta: $(this).find('.sub-in').last().find('.precioC')
+                .text(),
               fecha: $(this)
-                .find(".actualiz")
+                .find('.actualiz')
                 .text()
-                .replace(/(\r\n|\n|\r|\t)/gm, ""),
+                .replace(/(\r\n|\n|\r|\t)/gm, ''),
             },
           ],
         },
@@ -160,61 +159,35 @@ const dolarsanjuan = async () => {
 };
 
 const dolarito = async () => {
-  const url2Get = "https://dolarito.ar";
+  const url2Get = 'https://dolarito.ar';
   try {
     const response = await axios.get(url2Get);
     const $ = cheerio.load(response.data);
     const retorno = [];
-
-    $("li.chakra-wrap__listitem").each(function (i, e) {
-      if ($(this).find(".css-9jyaf5").text() == 'dolar oficial' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar blue' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar tarjeta' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar qatar' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar ahorro'
+    $('li.chakra-wrap__listitem').each(function (i, e) {
+      if ($(this).find('.css-9jyaf5').text() == 'dolar oficial'
+        || $(this).find('.css-9jyaf5').text() == 'dolar blue'
+        || $(this).find('.css-9jyaf5').text() == 'dolar tarjeta'
+        || $(this).find('.css-9jyaf5').text() == 'dolar qatar'
+        || $(this).find('.css-9jyaf5').text() == 'dolar ahorro'
       ) {
         retorno.push(
           {
             cotizacion: {
-              titulo: $(this).find(".css-9jyaf5").text(),
+              titulo: $(this).find('.css-9jyaf5').text(),
               empresas: [
                 {
-                  nombre: "dolarito.ar",
-                  variacion: $(this).find(".css-1yqik73").text(),
-                  venta: $(this).find(".css-12u0t8b").text(),
-                  compra: $(this).find(".css-113t1jt").text().trim(),
-                  fecha: $(this).find(".css-1mivafk").text(),
+                  nombre: 'dolarito.ar',
+                  variacion: $(this).find('.css-1yqik73').text(),
+                  venta: $(this).find('.css-12u0t8b').text(),
+                  compra: $(this).find('.css-113t1jt').text().trim(),
+                  fecha: $(this).find('.css-1mivafk').text(),
                 },
               ],
             },
-          }        
+          },
         );
       }
-      
-      /*
-      resp[i] = {
-        cotizacion: {
-          titulo: $(this)
-            .find(".divisa-name")
-            .text()
-            .trim()
-            .replace(/(\r\n|\n|\r|\t)/gm, ""),
-          empresas: [
-            {
-              nombre: "dolarsanjuan.com",
-              variacion: "",
-              compra: $(this).find(".sub-in").first().find(".precioC").text(),
-              venta: $(this).find(".sub-in").last().find(".precioC").text(),
-              fecha: $(this)
-                .find(".actualiz")
-                .text()
-                .replace(/(\r\n|\n|\r|\t)/gm, ""),
-            },
-          ],
-        },
-      };
-      */
-      console.log("Dolarito");
     });
     return retorno;
   } catch (error) {
@@ -224,45 +197,16 @@ const dolarito = async () => {
 };
 
 const calculadoras = async () => {
-  const url2Get = "https://calculadoras.com.ar/pro";
+  const url2Get = 'https://calculadoras.com.ar/pro';
   try {
     const response = await axios.get(url2Get);
     const $ = cheerio.load(response.data);
     const retorno = [];
-
     console.log(response.data);
-    $("div.gap-2").each(function (i, e) {
+    $('div.gap-2').each((i, e) => {
       console.log(`CalculadorasPro: ${i} || ${e}`);
       retorno.push(i);
     });
-
-    /*
-    $("li.chakra-wrap__listitem").each(function (i, e) {
-      if ($(this).find(".css-9jyaf5").text() == 'dolar oficial' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar blue' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar tarjeta' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar qatar' || 
-          $(this).find(".css-9jyaf5").text() == 'dolar ahorro'
-      ) {
-        retorno.push(
-          {
-            cotizacion: {
-              titulo: $(this).find(".css-9jyaf5").text(),
-              empresas: [
-                {
-                  nombre: "dolarito.ar",
-                  variacion: $(this).find(".css-1yqik73").text(),
-                  venta: $(this).find(".css-12u0t8b").text(),
-                  compra: $(this).find(".css-113t1jt").text().trim(),
-                  fecha: $(this).find(".css-1mivafk").text(),
-                },
-              ],
-            },
-          }        
-        );
-      }      
-    });
-    */
     return retorno;
   } catch (error) {
     console.log(error);
@@ -272,32 +216,33 @@ const calculadoras = async () => {
 
 // let elem = $('*[data-indice="/dolarturista"]').html();
 const cronista = async () => {
-  const url2Get = "https://www.cronista.com/MercadosOnline/dolar.html";
-
+  const url2Get = 'https://www.cronista.com/MercadosOnline/dolar.html';
   try {
     const response = await axios.get(url2Get, {
-      responseType: "arraybuffer",
-      responseEncoding: "binary",
+      responseType: 'arraybuffer',
+      responseEncoding: 'binary',
     });
 
-    const $ = cheerio.load(response.data.toString("latin1"), {
+    const $ = cheerio.load(response.data.toString('latin1'), {
       decodeEntities: false,
     });
     const retorno = [];
 
-    $("ul#market-scrll-2 li").each(function (i, e) {
-      let valorNombre = $(this).find(".name").text();
-
+    $('ul#market-scrll-2 li').each(function (i, e) {
+      const valorNombre = $(this).find('.name').text();
       retorno.push({
         cotizacion: {
           titulo: valorNombre,
           empresas: [
             {
-              nombre: "cronista.com",
-              variacion: $(this).find(".percentage > span").last().text(),
-              venta: $(this).find(".sell-value").contents().eq(1).text(),
-              compra: $(this).find(".buy-value").contents().eq(1).text(),
-              fecha: $(this).find(".date").text(),
+              nombre: 'cronista.com',
+              variacion: $(this).find('.percentage > span').last()
+                .text(),
+              venta: $(this).find('.sell-value').contents().eq(1)
+                .text(),
+              compra: $(this).find('.buy-value').contents().eq(1)
+                .text(),
+              fecha: $(this).find('.date').text(),
             },
           ],
         },
@@ -313,36 +258,36 @@ const cronista = async () => {
 const ambito = async () => {
   const arreUrls = [];
   arreUrls.push({
-    titulo: "Dólar Oficial",
-    url: "https://mercados.ambito.com//dolar/oficial/variacion"
+    titulo: 'Dólar Oficial',
+    url: 'https://mercados.ambito.com//dolar/oficial/variacion'
   });
   arreUrls.push({
-    titulo: "Dólar Nación",
-    url: "https://mercados.ambito.com/dolarnacion/variacion"
+    titulo: 'Dólar Nación',
+    url: 'https://mercados.ambito.com/dolarnacion/variacion'
   });
   arreUrls.push({
-    titulo: "Dólar Blue",
-    url: "https://mercados.ambito.com//euro/informal/variacion"
+    titulo: 'Dólar Blue',
+    url: 'https://mercados.ambito.com//euro/informal/variacion'
   });
   arreUrls.push({
-    titulo: "Dólar Turista",
-    url: "https://mercados.ambito.com//dolarturista/variacion"
+    titulo: 'Dólar Turista',
+    url: 'https://mercados.ambito.com//dolarturista/variacion'
   });
   arreUrls.push({
-    titulo: "Dólar Qatar",
-    url: "https://mercados.ambito.com//dolarqatar/variacion"
+    titulo: 'Dólar Qatar',
+    url: 'https://mercados.ambito.com//dolarqatar/variacion'
   });
   arreUrls.push({
-    titulo: "Dólar Crypto",
-    url: "https://mercados.ambito.com//dolarcripto/variacion"
+    titulo: 'Dólar Crypto',
+    url: 'https://mercados.ambito.com//dolarcripto/variacion'
   });
   arreUrls.push({
-    titulo: "Euro Oficial",
-    url: "https://mercados.ambito.com//euro/variacion"
+    titulo: 'Euro Oficial',
+    url: 'https://mercados.ambito.com//euro/variacion'
   });
   arreUrls.push({
-    titulo: "Euro Blue",
-    url: "https://mercados.ambito.com//euro/informal/variacion"
+    titulo: 'Euro Blue',
+    url: 'https://mercados.ambito.com//euro/informal/variacion'
   });
 
   // https://mercados.ambito.com//dolar/oficial/variacion
@@ -358,14 +303,11 @@ const ambito = async () => {
   // https://mercados.ambito.com/dolarnacion/variacion
 
   try {
-    
     const retorno = [];
     for (let item in arreUrls) {
-      //console.log(item);
-      //console.log(arreUrls[item]);
       try {
-        var titulo = arreUrls[item].titulo;
-        var url2Get = arreUrls[item].url;
+        let titulo = arreUrls[item].titulo;
+        let url2Get = arreUrls[item].url;
         await axios.get(url2Get).then((resp) => {
           retorno.push({
             cotizacion: {
@@ -384,350 +326,335 @@ const ambito = async () => {
         });
       } catch (error) {}
     }
-    
     return retorno;
-    
   } catch (error) {
-    console.log("Error en ambito: ", error);
+    console.log('Error en ambito: ', error);
     return false;
   }
-
-}
-
+};
 
 const cronistacripto = async () => {
-    const url2Get = 'https://www.cronista.com/bitcoin/';
-    try {
-        const response = await axios.get(url2Get);
-        const $ = cheerio.load(response.data);
-        const fecha = $('#market-scrll-2').find('.date').first().text();
-        const retorno = [];
+  const url2Get = 'https://www.cronista.com/bitcoin/';
+  try {
+    const response = await axios.get(url2Get);
+    const $ = cheerio.load(response.data);
+    const fecha = $('#market-scrll-2').find('.date').first().text();
+    const retorno = [];
 
-        // retorno.push({
-        //     cotizacion: {
-        //         titulo: "Bitcoin u$s",
-        //         empresa: {
-        //             "Bitso": {                    
-        //                 variacion: $('section.piece.marketsList.standard.markets > ul li:not(.list-title)').find('.percentage.col span:not(.arrow)').first().text(),
-        //                 compra: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.buy-value').first().text(),
-        //                 venta: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.sell').first().text(),
-        //                 fecha: fecha,
-        //             }
-        //         }
-        //     },
-        // });
+    retorno.push({
+      cotizacion: {
+        titulo: 'Bitcoin Dolares',
+        empresas: [{
+          nombre: 'Bitso',
+          variacion: $('section.piece.marketsList.standard.markets > ul li:not(.list-title)').find('.percentage.col span:not(.arrow)').first().text(),
+          compra: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.buy-value').first().text(),
+          venta: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.sell').first().text(),
+          fecha,
+        }],
+      },
+    });
 
-        retorno.push({
-            cotizacion: {
-                titulo: "Bitcoin Dolares",
-                empresas: [{
-                    nombre: "Bitso",
-                    variacion: $('section.piece.marketsList.standard.markets > ul li:not(.list-title)').find('.percentage.col span:not(.arrow)').first().text(),
-                    compra: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.buy-value').first().text(),
-                    venta: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.sell').first().text(),
-                    fecha: fecha,
-                }]
-            },
-        });
+    retorno.push({
+      cotizacion: {
+        titulo: 'Bitcoin Pesos',
+        empresas: [
+          {
+            nombre: 'Bitso',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha,
+          },
+          {
+            nombre: 'LetsBit',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha,
+          },
+          {
+            nombre: 'LemonCash',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha,
+          },
+          {
+            nombre: 'Ripio',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Bitcoin')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha,
+          },
+        ],
+      },
+    });
 
-        retorno.push({
-            cotizacion: {
-                titulo: "Bitcoin Pesos",
-                empresas: [
-                    {
-                        nombre: "Bitso",                        
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    {
-                        nombre: "LetsBit",
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    {
-                        nombre: "LemonCash",
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    {
-                        nombre: "Ripio",
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    
-                ]
-            },
-        });
-        
-        retorno.push({
-            cotizacion: {
-                titulo: "Ethereum Pesos",
-                empresas: [
-                    {
-                        nombre: "Bitso",
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    {
-                        nombre: "LetsBit",
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    {
-                        nombre: "LemonCash",
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    {
-                        nombre: "Ripio",
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                ]
-            },
-        });
-
-        /*
-
-        retorno.push({
-            cotizacion: {
-                titulo: "Bitcoin $",
-                empresa: {
-                    "Bitso": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    "LetsBit": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    "Lemon Cash": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    "Ripio": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Bitcoin')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                }
-            },
-        });
-
-        retorno.push({
-            cotizacion: {
-                titulo: "Ethereum $",
-                empresa: {
-                    "Bitso": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    "LetsBit": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    "LemonCash": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                    "Ripio": {
-                        variacion: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('span.percentage.col span:not(.arrow)').first().text(),
-                        compra: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.buy-value').first().text(),
-                        venta: $("div.piece.tabs.standard div.piecetitle:contains('Ethereum')")
-                            .closest('.piece.tabs.standard')
-                            .find('div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)')
-                            .find('.sell').first().text(),
-                        fecha: fecha,
-                    },
-                }
-            },
-        });
-        */
-
-        return retorno;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-}
+    retorno.push({
+      cotizacion: {
+        titulo: 'Ethereum Pesos',
+        empresas: [
+          {
+            nombre: 'Bitso',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(2)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha: fecha,
+          },
+          {
+            nombre: 'LetsBit',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(3)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha,
+          },
+          {
+            nombre: 'LemonCash',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(4)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha,
+          },
+          {
+            nombre: 'Ripio',
+            variacion: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)',
+              )
+              .find('span.percentage.col span:not(.arrow)')
+              .first()
+              .text(),
+            compra: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)',
+              )
+              .find('.buy-value')
+              .first()
+              .text(),
+            venta: $(
+              "div.piece.tabs.standard div.piecetitle:contains('Ethereum')",
+            )
+              .closest('.piece.tabs.standard')
+              .find(
+                'div.panels div.panel.selected section.piece.marketsList ul li:nth-child(5)',
+              )
+              .find('.sell')
+              .first()
+              .text(),
+            fecha,
+          },
+        ],
+      },
+    });
+    return retorno;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 
 module.exports = {
-    dolarsanjuan,
-    cronista,
-    cronistacripto,
-    bluelytics,
-    dolarito,
-    ambito,
-    dolarsi,
-    calculadoras,
+  dolarsanjuan,
+  cronista,
+  cronistacripto,
+  bluelytics,
+  dolarito,
+  ambito,
+  dolarsi,
+  calculadoras,
 };
