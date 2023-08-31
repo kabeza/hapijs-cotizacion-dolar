@@ -114,6 +114,25 @@ server.route({
 
 server.route({
   method: 'GET',
+  path: '/invertironline',
+  handler: async () => {
+    const result = await scraper.invertironline();
+    if (result) {
+      return {
+        status: true,
+        servicio: 'invertironline.com',
+        respuesta: result,
+      };
+    }
+    return {
+      status: false,
+      error: 'InvertirOnline: Error con axios o algo',
+    };
+  },
+});
+
+server.route({
+  method: 'GET',
   path: '/cronista',
   handler: async () => {
     const result = await scraper.cronista();
@@ -181,7 +200,8 @@ const init = async () => {
         prettyPrint: true,
         logEvents: ['response', 'onPostStart'],
       },
-    }]);
+    }
+  ]);
   await server.start();
   console.log(`Servidor corriendo en: ${server.info.uri}`);
 };

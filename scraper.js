@@ -158,37 +158,36 @@ const dolarsanjuan = async () => {
   }
 };
 
-const dolarito = async () => {
-  const url2Get = 'https://dolarito.ar';
+const calculadoras = async () => {
+  const url2Get = 'https://calculadoras.com.ar/pro';
   try {
     const response = await axios.get(url2Get);
     const $ = cheerio.load(response.data);
+
+    let jsonString = $('#app').attr('data-page');
+    let parsedJson = JSON.parse(jsonString);
+    // console.log(`Parse: ${JSON.stringify(parsedJson.props.tickers)}`);
+
     const retorno = [];
-    $('li.chakra-wrap__listitem').each(function (i, e) {
-      if ($(this).find('.css-9jyaf5').text() == 'dolar oficial'
-        || $(this).find('.css-9jyaf5').text() == 'dolar blue'
-        || $(this).find('.css-9jyaf5').text() == 'dolar tarjeta'
-        || $(this).find('.css-9jyaf5').text() == 'dolar qatar'
-        || $(this).find('.css-9jyaf5').text() == 'dolar ahorro'
-      ) {
-        retorno.push(
-          {
-            cotizacion: {
-              titulo: $(this).find('.css-9jyaf5').text(),
-              empresas: [
-                {
-                  nombre: 'dolarito.ar',
-                  variacion: $(this).find('.css-1yqik73').text(),
-                  venta: $(this).find('.css-12u0t8b').text(),
-                  compra: $(this).find('.css-113t1jt').text().trim(),
-                  fecha: $(this).find('.css-1mivafk').text(),
-                },
-              ],
+    for (let item in parsedJson.props.tickers) {
+      // console.log(`Item: ${item}`);
+      // console.log(`Items: ${JSON.stringify(parsedJson.props.tickers[item])}`);
+      retorno.push({
+        cotizacion: {
+          titulo: "calculadoras.com.ar",
+          empresas: [
+            {
+              nombre: parsedJson.props.tickers[item].name,
+              variacion: '',
+              venta: parsedJson.props.tickers[item].ticker.sell,
+              compra: parsedJson.props.tickers[item].ticker.buy,
+              fecha: parsedJson.props.tickers[item].last_update_at,
             },
-          },
-        );
-      }
-    });
+          ],
+        },
+      });
+    }
+
     return retorno;
   } catch (error) {
     console.log(error);
@@ -196,16 +195,37 @@ const dolarito = async () => {
   }
 };
 
-const calculadoras = async () => {
-  const url2Get = 'https://calculadoras.com.ar/pro';
+const invertironline = async () => {
+  const url2Get = 'https://iol.invertironline.com/mercado/cotizaciones/argentina/monedas';
   try {
     const response = await axios.get(url2Get);
     const $ = cheerio.load(response.data);
+
     const retorno = [];
-    console.log(response.data);
-    $('div.gap-2').each((i, e) => {
-      console.log(`CalculadorasPro: ${i} || ${e}`);
-      retorno.push(i);
+
+    const sel = "table#cotizaciones tr";
+    $(sel).each(function (i, e) {
+      if (i > 0) {
+        let tmpTD = [];
+        $(this).find("td").each(function (j, f) {
+          tmpTD.push($(this).text().trim());
+        });
+        console.log(`tmpTD: ${tmpTD}`);
+        retorno.push({
+          cotizacion: {
+            titulo: "InvertirOnline",
+            empresas: [
+              {
+                nombre: tmpTD[0].replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g,''),
+                variacion: tmpTD[4],
+                compra: tmpTD[1],
+                venta: tmpTD[2],
+                fecha: tmpTD[3],
+              },
+            ],
+          },
+        });
+      }
     });
     return retorno;
   } catch (error) {
@@ -653,8 +673,8 @@ module.exports = {
   cronista,
   cronistacripto,
   bluelytics,
-  dolarito,
   ambito,
   dolarsi,
   calculadoras,
+  invertironline
 };
