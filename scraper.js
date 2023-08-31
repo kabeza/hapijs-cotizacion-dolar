@@ -179,8 +179,8 @@ const calculadoras = async () => {
             {
               nombre: parsedJson.props.tickers[item].name,
               variacion: '',
-              venta: parsedJson.props.tickers[item].ticker.sell,
-              compra: parsedJson.props.tickers[item].ticker.buy,
+              compra: parseFloat(parsedJson.props.tickers[item].ticker.buy).toFixed(2),
+              venta: parseFloat(parsedJson.props.tickers[item].ticker.sell).toFixed(2),
               fecha: parsedJson.props.tickers[item].last_update_at,
             },
           ],
@@ -218,8 +218,8 @@ const invertironline = async () => {
               {
                 nombre: tmpTD[0].replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g,''),
                 variacion: tmpTD[4],
-                compra: tmpTD[1],
-                venta: tmpTD[2],
+                compra: parseFloat(tmpTD[1]).toFixed(2),
+                venta: parseFloat(tmpTD[2]).toFixed(2),
                 fecha: tmpTD[3],
               },
             ],
