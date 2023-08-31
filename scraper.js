@@ -174,10 +174,10 @@ const calculadoras = async () => {
       // console.log(`Items: ${JSON.stringify(parsedJson.props.tickers[item])}`);
       retorno.push({
         cotizacion: {
-          titulo: "calculadoras.com.ar",
+          titulo: parsedJson.props.tickers[item].name,
           empresas: [
             {
-              nombre: parsedJson.props.tickers[item].name,
+              nombre: "calculadoras.com.ar",
               variacion: '',
               compra: parseFloat(parsedJson.props.tickers[item].ticker.buy).toFixed(2),
               venta: parseFloat(parsedJson.props.tickers[item].ticker.sell).toFixed(2),
@@ -213,10 +213,10 @@ const invertironline = async () => {
         console.log(`tmpTD: ${tmpTD}`);
         retorno.push({
           cotizacion: {
-            titulo: "InvertirOnline",
+            titulo: tmpTD[0].replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g,''),
             empresas: [
               {
-                nombre: tmpTD[0].replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g,''),
+                nombre: "InvertirOnline.com",
                 variacion: tmpTD[4],
                 compra: parseFloat(tmpTD[1]).toFixed(2),
                 venta: parseFloat(tmpTD[2]).toFixed(2),
