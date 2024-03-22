@@ -84,6 +84,7 @@ const bluelytics = async () => {
   }
 };
 
+/*
 const dolarsi = async () => {
   const url2Get = 'https://www.dolarsi.com/api/api.php?type=valoresprincipales';
   let datosFinal = [];
@@ -119,6 +120,7 @@ const dolarsi = async () => {
     return false;
   }
 };
+*/
 
 const dolarsanjuan = async () => {
   const url2Get = 'https://dolarsanjuan.com';
@@ -158,6 +160,7 @@ const dolarsanjuan = async () => {
   }
 };
 
+/*
 const calculadoras = async () => {
   const url2Get = 'https://calculadoras.com.ar/pro';
   try {
@@ -166,12 +169,8 @@ const calculadoras = async () => {
 
     let jsonString = $('#app').attr('data-page');
     let parsedJson = JSON.parse(jsonString);
-    // console.log(`Parse: ${JSON.stringify(parsedJson.props.tickers)}`);
-
     const retorno = [];
     for (let item in parsedJson.props.tickers) {
-      // console.log(`Item: ${item}`);
-      // console.log(`Items: ${JSON.stringify(parsedJson.props.tickers[item])}`);
       retorno.push({
         cotizacion: {
           titulo: parsedJson.props.tickers[item].name,
@@ -187,13 +186,13 @@ const calculadoras = async () => {
         },
       });
     }
-
     return retorno;
   } catch (error) {
     console.log(error);
     return false;
   }
 };
+*/
 
 const invertironline = async () => {
   const url2Get = 'https://iol.invertironline.com/mercado/cotizaciones/argentina/monedas';
@@ -248,7 +247,69 @@ const cronista = async () => {
     });
     const retorno = [];
 
-    $('ul#market-scrll-2 li').each(function (i, e) {
+    $('td.name').each((index, element) => {
+      const name = $(element).text().trim();
+      const buyValue = $(element)
+        .siblings('.buy')
+        .find('.buy-value')
+        .clone()
+        .children('.currency')
+        .remove()
+        .end()
+        .text()
+        .trim();
+      const sellValue = $(element)
+        .siblings('.sell')
+        .find('.sell-value')
+        .clone()
+        .children('.currency')
+        .remove()
+        .end()
+        .text()
+        .trim();
+      const percentage = $(element)
+        .siblings('.percentage')
+        .find('.arrow')
+        .next()
+        .text()
+        .trim();
+      const date = $(element)
+        .siblings('.date')
+        .clone()
+        .children('span')
+        .remove()
+        .end()
+        .text()
+        .trim()
+        .replace('Actualizado: ', '');
+      retorno.push({
+        cotizacion: {
+          titulo: name,
+          empresas: [
+            {
+              nombre: name,
+              variacion: percentage,
+              venta: sellValue,
+              compra: buyValue,
+              fecha: date,
+            },
+          ],
+        },
+      });
+    });
+    // console.log(retorno);
+    /*
+    $('.zone .zfull .z100').each(function () {
+      const valorNombre = $(this).find('buy-value').text();
+      retorno.push({
+        cotizacion: {
+          titulo: valorNombre,
+        },
+      });
+    });
+    */
+    /*
+    $('ul#market-scrll-2 li').each(function () {
       const valorNombre = $(this).find('.name').text();
       retorno.push({
         cotizacion: {
@@ -268,6 +329,7 @@ const cronista = async () => {
         },
       });
     });
+    */
     return retorno;
   } catch (error) {
     console.log(error);
@@ -674,7 +736,5 @@ module.exports = {
   cronistacripto,
   bluelytics,
   ambito,
-  dolarsi,
-  calculadoras,
-  invertironline
+  invertironline,
 };

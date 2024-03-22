@@ -38,25 +38,6 @@ server.route({
 
 server.route({
   method: 'GET',
-  path: '/dolarito',
-  handler: async () => {
-    const result = await scraper.dolarito();
-    if (result) {
-      return {
-        status: true,
-        servicio: 'dolarito.ar',
-        respuesta: result,
-      };
-    }
-    return {
-      status: false,
-      error: 'Dolarito: Error con axios o algo',
-    };
-  },
-});
-
-server.route({
-  method: 'GET',
   path: '/calculadoras',
   handler: async () => {
     const result = await scraper.calculadoras();
