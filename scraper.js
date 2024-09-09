@@ -84,11 +84,10 @@ const bluelytics = async () => {
   }
 };
 
-/*
-const dolarsi = async () => {
-  const url2Get = 'https://www.dolarsi.com/api/api.php?type=valoresprincipales';
+// https://criptoya.com/api/dolar
+const criptoya = async () => {
+  const url2Get = 'https://criptoya.com/api/dolar';
   let datosFinal = [];
-  const retorno = [];
   try {
     await axios
       .get(url2Get)
@@ -98,29 +97,149 @@ const dolarsi = async () => {
       .catch(() => {
         datosFinal = [];
       });
-    datosFinal.map((item) => {
-      retorno.push({
-        cotizacion: {
-          titulo: item.casa.nombre,
-          empresas: [
-            {
-              nombre: 'dolarsi.com',
-              variacion: item.casa.variacion,
-              venta: item.casa.venta,
-              compra: item.casa.compra,
-              fecha: '',
-            },
-          ],
-        },
-      });
+    const retorno = [];
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Dolar Oficial',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.oficial.variation,
+            venta: datosFinal.oficial.price,
+            compra: datosFinal.oficial.price,
+            fecha: moment.unix(datosFinal.oficial.timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
     });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Dolar Tarjeta',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.tarjeta.variation,
+            venta: datosFinal.tarjeta.price,
+            compra: datosFinal.tarjeta.price,
+            fecha: moment.unix(datosFinal.tarjeta.timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Dolar Blue',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.blue.variation,
+            venta: datosFinal.blue.ask,
+            compra: datosFinal.blue.bid,
+            fecha: moment.unix(datosFinal.blue.timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Dolar MEP AL30 24H',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.mep.al30['24hs'].variation,
+            venta: datosFinal.mep.al30['24hs'].price,
+            compra: datosFinal.mep.al30['24hs'].price,
+            fecha: moment.unix(datosFinal.mep.al30['24hs'].timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Dolar MEP AL30 CI',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.mep.al30.ci.variation,
+            venta: datosFinal.mep.al30.ci.price,
+            compra: datosFinal.mep.al30.ci.price,
+            fecha: moment.unix(datosFinal.mep.al30.ci.timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Dolar MEP GD30 24H',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.mep.gd30['24hs'].variation,
+            venta: datosFinal.mep.gd30['24hs'].price,
+            compra: datosFinal.mep.gd30['24hs'].price,
+            fecha: moment.unix(datosFinal.mep.gd30['24hs'].timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Dolar MEP GD30 CI',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.mep.gd30.ci.variation,
+            venta: datosFinal.mep.gd30.ci.price,
+            compra: datosFinal.mep.gd30.ci.price,
+            fecha: moment.unix(datosFinal.mep.gd30.ci.timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Crypto - USDT',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.cripto.usdt.variation,
+            venta: datosFinal.cripto.usdt.ask,
+            compra: datosFinal.cripto.usdt.bid,
+            fecha: moment.unix(datosFinal.cripto.usdt.timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
+    retorno.push({
+      cotizacion: {
+        titulo: 'Crypto - USDC',
+        empresas: [
+          {
+            nombre: 'criptoya.com.ar',
+            variacion: datosFinal.cripto.usdc.variation,
+            venta: datosFinal.cripto.usdc.ask,
+            compra: datosFinal.cripto.usdc.bid,
+            fecha: moment.unix(datosFinal.cripto.usdc.timestamp).format('DD/MM/YYYY, H:mm:ss'),
+          },
+        ],
+      },
+    });
+
     return retorno;
   } catch (error) {
-    console.log('Error', error);
+    console.error(error);
     return false;
   }
 };
-*/
 
 const dolarsanjuan = async () => {
   const url2Get = 'https://dolarsanjuan.com';
@@ -160,40 +279,6 @@ const dolarsanjuan = async () => {
   }
 };
 
-/*
-const calculadoras = async () => {
-  const url2Get = 'https://calculadoras.com.ar/pro';
-  try {
-    const response = await axios.get(url2Get);
-    const $ = cheerio.load(response.data);
-
-    let jsonString = $('#app').attr('data-page');
-    let parsedJson = JSON.parse(jsonString);
-    const retorno = [];
-    for (let item in parsedJson.props.tickers) {
-      retorno.push({
-        cotizacion: {
-          titulo: parsedJson.props.tickers[item].name,
-          empresas: [
-            {
-              nombre: "calculadoras.com.ar",
-              variacion: '',
-              compra: parseFloat(parsedJson.props.tickers[item].ticker.buy).toFixed(2),
-              venta: parseFloat(parsedJson.props.tickers[item].ticker.sell).toFixed(2),
-              fecha: parsedJson.props.tickers[item].last_update_at,
-            },
-          ],
-        },
-      });
-    }
-    return retorno;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};
-*/
-
 const invertironline = async () => {
   const url2Get = 'https://iol.invertironline.com/mercado/cotizaciones/argentina/monedas';
   try {
@@ -226,110 +311,6 @@ const invertironline = async () => {
         });
       }
     });
-    return retorno;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};
-
-// let elem = $('*[data-indice="/dolarturista"]').html();
-const cronista = async () => {
-  const url2Get = 'https://www.cronista.com/MercadosOnline/dolar.html';
-  try {
-    const response = await axios.get(url2Get, {
-      responseType: 'arraybuffer',
-      responseEncoding: 'binary',
-    });
-
-    const $ = cheerio.load(response.data.toString('latin1'), {
-      decodeEntities: false,
-    });
-    const retorno = [];
-
-    $('td.name').each((index, element) => {
-      const name = $(element).text().trim();
-      const buyValue = $(element)
-        .siblings('.buy')
-        .find('.buy-value')
-        .clone()
-        .children('.currency')
-        .remove()
-        .end()
-        .text()
-        .trim();
-      const sellValue = $(element)
-        .siblings('.sell')
-        .find('.sell-value')
-        .clone()
-        .children('.currency')
-        .remove()
-        .end()
-        .text()
-        .trim();
-      const percentage = $(element)
-        .siblings('.percentage')
-        .find('.arrow')
-        .next()
-        .text()
-        .trim();
-      const date = $(element)
-        .siblings('.date')
-        .clone()
-        .children('span')
-        .remove()
-        .end()
-        .text()
-        .trim()
-        .replace('Actualizado: ', '');
-      retorno.push({
-        cotizacion: {
-          titulo: name,
-          empresas: [
-            {
-              nombre: name,
-              variacion: percentage,
-              venta: sellValue,
-              compra: buyValue,
-              fecha: date,
-            },
-          ],
-        },
-      });
-    });
-    // console.log(retorno);
-    /*
-    $('.zone .zfull .z100').each(function () {
-      const valorNombre = $(this).find('buy-value').text();
-      retorno.push({
-        cotizacion: {
-          titulo: valorNombre,
-        },
-      });
-    });
-    */
-    /*
-    $('ul#market-scrll-2 li').each(function () {
-      const valorNombre = $(this).find('.name').text();
-      retorno.push({
-        cotizacion: {
-          titulo: valorNombre,
-          empresas: [
-            {
-              nombre: 'cronista.com',
-              variacion: $(this).find('.percentage > span').last()
-                .text(),
-              venta: $(this).find('.sell-value').contents().eq(1)
-                .text(),
-              compra: $(this).find('.buy-value').contents().eq(1)
-                .text(),
-              fecha: $(this).find('.date').text(),
-            },
-          ],
-        },
-      });
-    });
-    */
     return retorno;
   } catch (error) {
     console.log(error);
@@ -415,27 +396,112 @@ const ambito = async () => {
   }
 };
 
+// let elem = $('*[data-indice="/dolarturista"]').html();
+const cronista = async () => {
+  const url2Get = 'https://www.cronista.com/MercadosOnline/dolar.html';
+  try {
+    const response = await axios.get(url2Get, {
+      responseType: 'arraybuffer',
+      responseEncoding: 'binary',
+    });
+
+    const $ = cheerio.load(response.data.toString('latin1'), {
+      decodeEntities: false,
+    });
+    const retorno = [];
+
+    $('td.name').each((index, element) => {
+      const name = $(element).find('a').text().trim();
+      const buyValue = $(element)
+        .siblings('.buy')
+        .find('.buy-value')
+        .clone()
+        .children('.currency')
+        .remove()
+        .end()
+        .text()
+        .trim();
+      const sellValue = $(element)
+        .siblings('.sell')
+        .find('.sell-value')
+        .clone()
+        .children('.currency')
+        .remove()
+        .end()
+        .text()
+        .trim();
+      const percentage = $(element)
+        .siblings('.percentage')
+        .find('.arrow')
+        .next()
+        .text()
+        .trim();
+      const date = $(element)
+        .siblings('.date')
+        .clone()
+        .children('span')
+        .remove()
+        .end()
+        .text()
+        .trim()
+        .replace('Actualizado: ', '');
+      retorno.push({
+        cotizacion: {
+          titulo: name,
+          empresas: [
+            {
+              nombre: name,
+              variacion: percentage,
+              venta: sellValue,
+              compra: buyValue,
+              fecha: date,
+            },
+          ],
+        },
+      });
+    });
+    return retorno;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 const cronistacripto = async () => {
   const url2Get = 'https://www.cronista.com/bitcoin/';
   try {
-    const response = await axios.get(url2Get);
-    const $ = cheerio.load(response.data);
-    const fecha = $('#market-scrll-2').find('.date').first().text();
+    // const response = await axios.get(url2Get);
+    // const $ = cheerio.load(response.data.toString('latin1'), {
+    //   decodeEntities: false,
+    // });
+    // const fecha = $('#market-scrll-2').find('.date').first().text();
+    // const retorno = [];
+
+    const response = await axios.get(url2Get, {
+      responseType: 'arraybuffer',
+      responseEncoding: 'binary',
+    });
+    const $ = cheerio.load(response.data.toString('latin1'), {
+      decodeEntities: false,
+    });
     const retorno = [];
 
-    retorno.push({
-      cotizacion: {
-        titulo: 'Bitcoin Dolares',
-        empresas: [{
-          nombre: 'Bitso',
-          variacion: $('section.piece.marketsList.standard.markets > ul li:not(.list-title)').find('.percentage.col span:not(.arrow)').first().text(),
-          compra: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.buy-value').first().text(),
-          venta: $('section.piece.marketsList.standard.markets ul.list > li:not(.list-title)').find('.sell').first().text(),
-          fecha,
-        }],
-      },
+    $('#market-scrll-2 tr').each((index, element) => {
+      retorno.push({
+        cotizacion: {
+          titulo: $(element).find('.name a').text().trim(),
+          empresas: [{
+            nombre: 'Cronista Cripto',
+            variacion: $(element).find('.percentage span:not(.arrow)').text().trim(),
+            compra: $(element).find('.sell-value').text().trim(),
+            venta: $(element).find('.sell-value').text().trim(),
+            fecha: $(element).find('.date').text().trim(),
+          }],
+        },
+      });
     });
 
+    /*
     retorno.push({
       cotizacion: {
         titulo: 'Bitcoin Pesos',
@@ -723,6 +789,7 @@ const cronistacripto = async () => {
         ],
       },
     });
+    */
     return retorno;
   } catch (error) {
     console.log(error);
@@ -732,6 +799,7 @@ const cronistacripto = async () => {
 
 module.exports = {
   dolarsanjuan,
+  criptoya,
   cronista,
   cronistacripto,
   bluelytics,

@@ -169,6 +169,26 @@ server.route({
   },
 });
 
+// https://criptoya.com/api/dolar
+server.route({
+  method: 'GET',
+  path: '/criptoya',
+  handler: async () => {
+    const result = await scraper.criptoya();
+    if (result) {
+      return {
+        status: true,
+        servicio: 'CriptoYa',
+        respuesta: result,
+      };
+    }
+    return {
+      status: false,
+      error: 'CriptoYa: Error con axios o algo',
+    };
+  },
+});
+
 const init = async () => {
   await server.register([
     {
@@ -188,7 +208,7 @@ const init = async () => {
 };
 
 process.on('unhandledRejection', (err) => {
-  console.log(err);
+  console.error(err);
   process.exit(1);
 });
 
