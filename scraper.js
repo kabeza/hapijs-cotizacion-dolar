@@ -247,7 +247,7 @@ const dolarsanjuan = async () => {
     const response = await axios.get(url2Get);
     const $ = cheerio.load(response.data);
     const resp = [];
-    $('.sub').each(function (i, e) {
+    $('.sub').each(function (i) {
       resp[i] = {
         cotizacion: {
           titulo: $(this)
@@ -287,20 +287,20 @@ const invertironline = async () => {
 
     const retorno = [];
 
-    const sel = "table#cotizaciones tr";
-    $(sel).each(function (i, e) {
+    const sel = 'table#cotizaciones tr';
+    $(sel).each(function (i) {
       if (i > 0) {
-        let tmpTD = [];
-        $(this).find("td").each(function (j, f) {
+        const tmpTD = [];
+        $(this).find('td').each(function () {
           tmpTD.push($(this).text().trim());
         });
         console.log(`tmpTD: ${tmpTD}`);
         retorno.push({
           cotizacion: {
-            titulo: tmpTD[0].replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g,''),
+            titulo: tmpTD[0].replace(/(\r\n|\n|\r)/gm, '').replace(/ +(?= )/g, ''),
             empresas: [
               {
-                nombre: "InvertirOnline.com",
+                nombre: 'InvertirOnline.com',
                 variacion: tmpTD[4],
                 compra: parseFloat(tmpTD[1]).toFixed(2),
                 venta: parseFloat(tmpTD[2]).toFixed(2),
@@ -322,35 +322,35 @@ const ambito = async () => {
   const arreUrls = [];
   arreUrls.push({
     titulo: 'Dólar Oficial',
-    url: 'https://mercados.ambito.com//dolar/oficial/variacion'
+    url: 'https://mercados.ambito.com//dolar/oficial/variacion',
   });
   arreUrls.push({
     titulo: 'Dólar Nación',
-    url: 'https://mercados.ambito.com/dolarnacion/variacion'
+    url: 'https://mercados.ambito.com/dolarnacion/variacion',
   });
   arreUrls.push({
     titulo: 'Dólar Blue',
-    url: 'https://mercados.ambito.com//euro/informal/variacion'
+    url: 'https://mercados.ambito.com//euro/informal/variacion',
   });
   arreUrls.push({
     titulo: 'Dólar Turista',
-    url: 'https://mercados.ambito.com//dolarturista/variacion'
+    url: 'https://mercados.ambito.com//dolarturista/variacion',
   });
   arreUrls.push({
     titulo: 'Dólar Qatar',
-    url: 'https://mercados.ambito.com//dolarqatar/variacion'
+    url: 'https://mercados.ambito.com//dolarqatar/variacion',
   });
   arreUrls.push({
     titulo: 'Dólar Crypto',
-    url: 'https://mercados.ambito.com//dolarcripto/variacion'
+    url: 'https://mercados.ambito.com//dolarcripto/variacion',
   });
   arreUrls.push({
     titulo: 'Euro Oficial',
-    url: 'https://mercados.ambito.com//euro/variacion'
+    url: 'https://mercados.ambito.com//euro/variacion',
   });
   arreUrls.push({
     titulo: 'Euro Blue',
-    url: 'https://mercados.ambito.com//euro/informal/variacion'
+    url: 'https://mercados.ambito.com//euro/informal/variacion',
   });
 
   // https://mercados.ambito.com//dolar/oficial/variacion

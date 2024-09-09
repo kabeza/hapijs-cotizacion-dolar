@@ -201,7 +201,7 @@ const init = async () => {
         prettyPrint: true,
         logEvents: ['response', 'onPostStart'],
       },
-    }
+    },
   ]);
   await server.start();
   console.log(`Servidor corriendo en: ${server.info.uri}`);
